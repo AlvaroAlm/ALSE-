@@ -1,0 +1,39 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+// Exercism: Armstrong Numbers
+bool isArmstrong(int number) {
+    if (number < 0) return false;
+    
+    // Count digits
+    int n = number;
+    int numDigits = 0;
+    if (n == 0) numDigits = 1;
+    while (n > 0) {
+        numDigits++;
+        n /= 10;
+    }
+    
+    // Sum of each digit raised to numDigits
+    long long sum = 0;
+    n = number;
+    while (n > 0) {
+        int digit = n % 10;
+        sum += (long long)pow(digit, numDigits);
+        n /= 10;
+    }
+    
+    return sum == number;
+}
+
+int main() {
+    cout << "=== Exercism: Armstrong Numbers ===" << endl;
+    
+    int tests[] = {0, 1, 5, 9, 10, 153, 154, 370, 371, 407, 1634};
+    for (int num : tests) {
+        cout << num << " -> " << (isArmstrong(num) ? "Armstrong" : "Not Armstrong") << endl;
+    }
+    
+    return 0;
+}
