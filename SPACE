@@ -1,0 +1,50 @@
+#include <iostream>
+#include <string>
+#include <map>
+#include <iomanip>
+using namespace std;
+
+// Exercism: Space Age
+const double EARTH_YEAR_SECONDS = 31557600.0;
+
+const map<string, double> ORBITAL_PERIODS = {
+    {"mercury", 0.2408467},
+    {"venus",   0.61519726},
+    {"earth",   1.0},
+    {"mars",    1.8808158},
+    {"jupiter", 11.862615},
+    {"saturn",  29.447498},
+    {"uranus",  84.016846},
+    {"neptune", 164.79132}
+};
+
+double ageOn(const string& planet, long long seconds) {
+    auto it = ORBITAL_PERIODS.find(planet);
+    if (it == ORBITAL_PERIODS.end()) {
+        throw invalid_argument("Unknown planet: " + planet);
+    }
+    double earthYears = seconds / EARTH_YEAR_SECONDS;
+    return earthYears / it->second;
+}
+
+int main() {
+    cout << "=== Exercism: Space Age ===" << endl;
+    cout << fixed << setprecision(2);
+    
+    long long age = 1000000000LL;
+    cout << "Age: " << age << " seconds" << endl;
+    
+    for (const auto& p : ORBITAL_PERIODS) {
+        cout << p.first << ": " << ageOn(p.first, age) << " years" << endl;
+    }
+    
+    cout << "\n--- Specific test: 1,000,000,000 seconds on Earth ---" << endl;
+    cout << "Earth age: " << ageOn("earth", age) << " (expected: ~31.69)" << endl;
+    
+    cout << "\n--- Age 2,134,835,688 seconds ---" << endl;
+    long long age2 = 2134835688LL;
+    cout << "Mercury: " << ageOn("mercury", age2) << " (expected: ~280.88)" << endl;
+    cout << "Venus:   " << ageOn("venus",   age2) << " (expected: ~110.21)" << endl;
+    
+    return 0;
+}
