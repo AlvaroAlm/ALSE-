@@ -1,0 +1,60 @@
+#include <iostream>
+#include <stdexcept>
+#include <cmath>
+using namespace std;
+
+// Exercism: Queen Attack
+class Queen {
+public:
+    int row, col;
+    Queen(int r, int c) {
+        if (r < 0 || r > 7 || c < 0 || c > 7)
+            throw invalid_argument("Queen position must be on the board (0-7).");
+        row = r; col = c;
+    }
+};
+
+bool canAttack(const Queen& white, const Queen& black) {
+    if (white.row == black.row && white.col == black.col)
+        throw invalid_argument("Queens cannot occupy the same position.");
+    // Same row, column, or diagonal
+    return white.row == black.row ||
+           white.col == black.col ||
+           abs(white.row - black.row) == abs(white.col - black.col);
+}
+
+void test(int wr, int wc, int br, int bc) {
+    try {
+        Queen w(wr, wc), b(br, bc);
+        bool attack = canAttack(w, b);
+        cout << "White(" << wr << "," << wc << ") vs Black(" << br << "," << bc << "): "
+             << (attack ? "CAN attack" : "CANNOT attack") << endl;
+    } catch (const exception& e) {
+        cout << "Error: " << e.what() << endl;
+    }
+}
+
+int main() {
+    cout << "=== Exercism: Queen Attack ===" << endl;
+
+    // From problem: white queen (row=2, col=4), black queen (row=6, col=0) - diagonal diff=4,4
+    cout << "\n--- Caso del problema (diagonal) ---" << endl;
+    test(2, 4, 6, 0); // diagonal: abs(2-6)==abs(4-0) => 4==4 yes
+    
+    cout << "\n--- Misma fila ---" << endl;
+    test(2, 4, 2, 6); // same row
+
+    cout << "\n--- Misma columna ---" << endl;
+    test(1, 4, 6, 4); // same col
+
+    cout << "\n--- Sin ataque ---" << endl;
+    test(2, 3, 4, 7); // no attack
+
+    cout << "\n--- Misma posicion (error) ---" << endl;
+    test(3, 3, 3, 3);
+
+    cout << "\n--- Fuera del tablero (error) ---" << endl;
+    test(-1, 0, 2, 3);
+
+    return 0;
+}
