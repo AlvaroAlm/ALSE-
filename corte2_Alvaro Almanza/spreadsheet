@@ -1,0 +1,62 @@
+#include <iostream>
+#include <unordered_map>
+#include <string>
+#include <stdexcept>
+using namespace std;
+
+// LeetCode 3484: Design Spreadsheet
+class Spreadsheet {
+private:
+    int rows;
+    unordered_map<string, int> cells;
+
+    int parseValue(const string& token) {
+        // Check if it's a cell reference (letter + number)
+        if (!token.empty() && isupper(token[0]) && token.size() > 1) {
+            return cells.count(token) ? cells.at(token) : 0;
+        }
+        return stoi(token);
+    }
+
+public:
+    Spreadsheet(int rows) : rows(rows) {}
+
+    void setCell(const string& cell, int value) {
+        cells[cell] = value;
+    }
+
+    void resetCell(const string& cell) {
+        cells.erase(cell);
+    }
+
+    int getValue(const string& formula) {
+        // Format: "=X+Y"
+        string expr = formula.substr(1); // remove '='
+        size_t plus = expr.find('+');
+        string left  = expr.substr(0, plus);
+        string right = expr.substr(plus + 1);
+        return parseValue(left) + parseValue(right);
+    }
+};
+
+int main() {
+    cout << "=== LeetCode 3484: Design Spreadsheet ===" << endl;
+
+    Spreadsheet sp(3);
+    cout << "getValue(\"=5+7\"): " << sp.getValue("=5+7") << " (expected: 12)" << endl;
+    sp.setCell("A1", 10);
+    cout << "getValue(\"=A1+6\"): " << sp.getValue("=A1+6") << " (expected: 16)" << endl;
+    sp.setCell("B2", 15);
+    cout << "getValue(\"=A1+B2\"): " << sp.getValue("=A1+B2") << " (expected: 25)" << endl;
+    sp.resetCell("A1");
+    cout << "getValue(\"=A1+B2\") after reset: " << sp.getValue("=A1+B2") << " (expected: 15)" << endl;
+
+    cout << "\n--- Test adicional ---" << endl;
+    Spreadsheet sp2(10);
+    sp2.setCell("Z10", 100);
+    sp2.setCell("A1", 50);
+    cout << "getValue(\"=Z10+A1\"): " << sp2.getValue("=Z10+A1") << " (expected: 150)" << endl;
+    cout << "getValue(\"=C5+0\"): " << sp2.getValue("=C5+0") << " (expected: 0, celda sin setear)" << endl;
+
+    return 0;
+}
