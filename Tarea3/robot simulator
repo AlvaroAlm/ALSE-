@@ -1,0 +1,73 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Exercism: Robot Simulator
+enum Direction { NORTH, EAST, SOUTH, WEST };
+
+string dirName(Direction d) {
+    switch(d) {
+        case NORTH: return "NORTH";
+        case EAST:  return "EAST";
+        case SOUTH: return "SOUTH";
+        case WEST:  return "WEST";
+    }
+    return "";
+}
+
+class Robot {
+private:
+    int x, y;
+    Direction dir;
+
+    void turnRight() { dir = static_cast<Direction>((dir + 1) % 4); }
+    void turnLeft()  { dir = static_cast<Direction>((dir + 3) % 4); }
+    void advance() {
+        if (dir == NORTH) y++;
+        else if (dir == EAST)  x++;
+        else if (dir == SOUTH) y--;
+        else if (dir == WEST)  x--;
+    }
+
+public:
+    Robot(int x, int y, Direction dir) : x(x), y(y), dir(dir) {}
+
+    void execute(const string& instructions) {
+        for (char cmd : instructions) {
+            if (cmd == 'R') turnRight();
+            else if (cmd == 'L') turnLeft();
+            else if (cmd == 'A') advance();
+        }
+    }
+
+    int getX() const { return x; }
+    int getY() const { return y; }
+    Direction getDir() const { return dir; }
+};
+
+int main() {
+    cout << "=== Exercism: Robot Simulator ===" << endl;
+
+    // Test 1: from problem description
+    Robot r1(7, 3, NORTH);
+    r1.execute("RAALAL");
+    cout << "Start: (7,3) NORTH, instructions: RAALAL" << endl;
+    cout << "Result: (" << r1.getX() << "," << r1.getY() << ") "
+         << dirName(r1.getDir()) << " (expected: (9,4) WEST)" << endl;
+
+    cout << "\n--- Test 2 ---" << endl;
+    Robot r2(0, 0, NORTH);
+    r2.execute("LAAARALA");
+    cout << "Start: (0,0) NORTH, instructions: LAAARALA" << endl;
+    cout << "Result: (" << r2.getX() << "," << r2.getY() << ") "
+         << dirName(r2.getDir()) << " (expected: (-4,1) WEST)" << endl;
+
+    cout << "\n--- Test 3 ---" << endl;
+    Robot r3(2, -7, EAST);
+    r3.execute("AAAALLL");
+    cout << "Start: (2,-7) EAST, instructions: AAAALLL" << endl;
+    cout << "Result: (" << r3.getX() << "," << r3.getY() << ") "
+         << dirName(r3.getDir()) << " (expected: (6,-7) SOUTH)" << endl;
+
+    return 0;
+}
