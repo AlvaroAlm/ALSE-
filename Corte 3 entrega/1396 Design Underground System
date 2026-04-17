@@ -1,0 +1,50 @@
+#include <iostream>
+#include <string>
+#include <unordered_map>
+
+using namespace std;
+
+class UndergroundSystem {
+private:
+    unordered_map<int, pair<string, int>> checkIns;
+    unordered_map<string, pair<double, int>> travels;
+
+public:
+    UndergroundSystem() {}
+
+    void checkIn(int id, string stationName, int t) {
+        checkIns[id] = {stationName, t};
+    }
+
+    void checkOut(int id, string stationName, int t) {
+        auto& [startStation, startTime] = checkIns[id];
+        string key = startStation + "-" + stationName;
+        travels[key].first += t - startTime;
+        travels[key].second += 1;
+        checkIns.erase(id);
+    }
+
+    double getAverageTime(string startStation, string endStation) {
+        string key = startStation + "-" + endStation;
+        auto& [total, count] = travels[key];
+        return total / count;
+    }
+};
+
+int main() {
+    UndergroundSystem* us = new UndergroundSystem();
+    us->checkIn(45, "Leyton", 3);
+    us->checkIn(32, "Paradise", 8);
+    us->checkIn(27, "Leyton", 10);
+    us->checkOut(45, "Waterloo", 15);
+    us->checkOut(27, "Waterloo", 20);
+    us->checkOut(32, "Cambridge", 22);
+    cout << "getAverageTime(Paradise, Cambridge): " << us->getAverageTime("Paradise", "Cambridge") << endl;
+    cout << "getAverageTime(Leyton, Waterloo): "    << us->getAverageTime("Leyton", "Waterloo") << endl;
+    us->checkIn(10, "Leyton", 24);
+    cout << "getAverageTime(Leyton, Waterloo): "    << us->getAverageTime("Leyton", "Waterloo") << endl;
+    us->checkOut(10, "Waterloo", 38);
+    cout << "getAverageTime(Leyton, Waterloo): "    << us->getAverageTime("Leyton", "Waterloo") << endl;
+    delete us;
+    return 0;
+}
