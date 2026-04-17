@@ -1,0 +1,50 @@
+#pragma once
+#include <string>
+#include <sstream>
+#include <iomanip>
+
+namespace date_independent {
+
+class clock {
+    int minutes_;
+
+    static int normalize(int m) {
+        m %= 1440;
+        if (m < 0) m += 1440;
+        return m;
+    }
+
+public:
+    clock(int hour, int minute) {
+        minutes_ = normalize(hour * 60 + minute);
+    }
+
+    clock& operator+=(int minutes) {
+        minutes_ = normalize(minutes_ + minutes);
+        return *this;
+    }
+
+    clock& operator-=(int minutes) {
+        minutes_ = normalize(minutes_ - minutes);
+        return *this;
+    }
+
+    bool operator==(const clock& other) const {
+        return minutes_ == other.minutes_;
+    }
+
+    bool operator!=(const clock& other) const {
+        return !(*this == other);
+    }
+
+    std::string text() const {
+        int h = minutes_ / 60;
+        int m = minutes_ % 60;
+        std::ostringstream ss;
+        ss << std::setw(2) << std::setfill('0') << h << ":"
+           << std::setw(2) << std::setfill('0') << m;
+        return ss.str();
+    }
+};
+
+} // namespace date_independent
