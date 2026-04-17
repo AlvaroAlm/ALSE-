@@ -1,0 +1,50 @@
+#include <iostream>
+#include <unordered_map>
+
+using namespace std;
+
+class AuctionSystem {
+private:
+    unordered_map<int, unordered_map<int, int>> bids;
+
+public:
+    AuctionSystem() {}
+
+    void addBid(int userId, int itemId, int bidAmount) {
+        bids[itemId][userId] = bidAmount;
+    }
+
+    void updateBid(int userId, int itemId, int newAmount) {
+        bids[itemId][userId] = newAmount;
+    }
+
+    void removeBid(int userId, int itemId) {
+        bids[itemId].erase(userId);
+    }
+
+    int getHighestBidder(int itemId) {
+        if (bids.find(itemId) == bids.end() || bids[itemId].empty())
+            return -1;
+        int bestUser = -1, bestBid = -1;
+        for (auto& [uid, bid] : bids[itemId]) {
+            if (bid > bestBid || (bid == bestBid && uid > bestUser)) {
+                bestBid = bid;
+                bestUser = uid;
+            }
+        }
+        return bestUser;
+    }
+};
+
+int main() {
+    AuctionSystem as;
+    as.addBid(1, 7, 5);
+    as.addBid(2, 7, 6);
+    cout << "getHighestBidder(7): " << as.getHighestBidder(7) << endl;
+    as.updateBid(1, 7, 8);
+    cout << "getHighestBidder(7): " << as.getHighestBidder(7) << endl;
+    as.removeBid(2, 7);
+    cout << "getHighestBidder(7): " << as.getHighestBidder(7) << endl;
+    cout << "getHighestBidder(3): " << as.getHighestBidder(3) << endl;
+    return 0;
+}
