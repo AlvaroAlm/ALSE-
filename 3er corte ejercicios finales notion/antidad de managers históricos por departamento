@@ -1,0 +1,13 @@
+-- ============================================================
+-- Repositorio : https://github.com/AlvaroAlm/ALSE-
+-- Autor       : Alvaro Luis Almanza Diaz
+-- Base de datos: Employees | Nivel: Intermedio | Ejercicio: 05
+-- Descripción : Cantidad de managers históricos por departamento
+-- ============================================================
+
+SELECT d.dept_name,
+       COUNT(dm.emp_no) AS total_managers
+FROM departments d
+JOIN dept_manager dm ON d.dept_no = dm.dept_no
+GROUP BY d.dept_no, d.dept_name
+ORDER BY total_managers DESC;
