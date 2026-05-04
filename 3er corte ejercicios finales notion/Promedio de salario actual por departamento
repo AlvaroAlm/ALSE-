@@ -1,0 +1,16 @@
+-- ============================================================
+-- Repositorio : https://github.com/AlvaroAlm/ALSE-
+-- Autor       : Alvaro Luis Almanza Diaz
+-- Base de datos: Employees | Nivel: Intermedio | Ejercicio: 02
+-- Descripción : Promedio de salario actual por departamento
+-- ============================================================
+
+SELECT d.dept_name,
+       ROUND(AVG(s.salary), 2) AS promedio_salario
+FROM departments d
+JOIN dept_emp de ON d.dept_no = de.dept_no
+JOIN salaries s  ON de.emp_no = s.emp_no
+WHERE de.to_date = '9999-01-01'
+  AND s.to_date  = '9999-01-01'
+GROUP BY d.dept_no, d.dept_name
+ORDER BY promedio_salario DESC;
