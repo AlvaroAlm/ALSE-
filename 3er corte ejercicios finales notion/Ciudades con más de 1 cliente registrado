@@ -1,0 +1,9 @@
+
+SELECT ci.city,
+       COUNT(c.customer_id) AS num_clientes
+FROM city ci
+JOIN address  a ON ci.city_id   = a.city_id
+JOIN customer c ON a.address_id = c.address_id
+GROUP BY ci.city_id, ci.city
+HAVING COUNT(c.customer_id) > 1
+ORDER BY num_clientes DESC;
