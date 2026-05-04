@@ -1,0 +1,11 @@
+-- ============================================================
+-- Repositorio : https://github.com/AlvaroAlm/ALSE-
+-- Autor       : Alvaro Luis Almanza Diaz
+-- Base de datos: Employees | Nivel: Básico | Ejercicio: 05
+-- Descripción : Cantidad de empleados por género
+-- ============================================================
+
+SELECT gender,
+       COUNT(*) AS total_empleados
+FROM employees
+GROUP BY gender;
