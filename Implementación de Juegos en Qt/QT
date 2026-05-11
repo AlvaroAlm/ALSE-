@@ -1,0 +1,29 @@
+QT       += core gui sql widgets
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+CONFIG += c++17
+
+TARGET = juegos_qt
+TEMPLATE = app
+
+SOURCES += \
+    main.cpp \
+    mainwindow.cpp \
+    tictactoe/tictactoewidget.cpp \
+    hanoi/hanoiwidget.cpp \
+    hanoi/hanoicanvas.cpp \
+    hanoi/leaderboarddialog.cpp \
+    hanoi/database.cpp
+
+HEADERS += \
+    mainwindow.h \
+    tictactoe/tictactoewidget.h \
+    hanoi/hanoiwidget.h \
+    hanoi/hanoicanvas.h \
+    hanoi/leaderboarddialog.h \
+    hanoi/database.h
+
+qnx: target.path = /tmp/$${TARGET}/bin
+else: unix:!android: target.path = /opt/$${TARGET}/bin
+!isEmpty(target.path): INSTALLS += target
