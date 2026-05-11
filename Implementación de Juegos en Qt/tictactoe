@@ -1,0 +1,58 @@
+<#ifndef TICTACTOEWIDGET_H
+#define TICTACTOEWIDGET_H
+
+#include <QWidget>
+#include <QPushButton>
+#include <QLabel>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QRadioButton>
+#include <QButtonGroup>
+#include <array>
+
+class TicTacToeWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit TicTacToeWidget(QWidget *parent = nullptr);
+
+private slots:
+    void onCellClicked(int index);
+    void resetGame();
+    void setMode(int mode); // 0 = 2 players, 1 = vs AI
+
+private:
+    // UI
+    QLabel        *m_statusLabel;
+    QLabel        *m_scoreX;
+    QLabel        *m_scoreO;
+    QLabel        *m_scoreDraw;
+    QPushButton   *m_cells[9];
+    QPushButton   *m_resetBtn;
+    QRadioButton  *m_rb2P;
+    QRadioButton  *m_rbAI;
+
+    // Game state
+    std::array<char, 9> m_board;   // ' ', 'X', 'O'
+    char   m_current;
+    bool   m_gameOver;
+    int    m_mode;                  // 0 = 2P, 1 = AI
+    int    m_wins[2];               // [X, O]
+    int    m_draws;
+
+    void setupUI();
+    void updateScores();
+    void checkResult();
+    void highlightWin(const std::array<int,3>& line);
+    void endGame(const QString& msg, int winner); // -1 draw, 0=X, 1=O
+    void aiMove();
+    int  minimax(std::array<char,9> board, char player, int depth);
+    int  bestMove();
+    int  checkWinner(const std::array<char,9>& b); // 0=none,1=X,2=O,3=draw
+    void applyStyle(QPushButton* btn, char val);
+};
+
+#endif // TICTACTOEWIDGET_H
+>
